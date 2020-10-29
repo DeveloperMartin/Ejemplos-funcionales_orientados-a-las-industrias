@@ -14,18 +14,16 @@ Lo primero a tener en cuenta es el **reparto de trabajo** que se debe hacer para
 
 **¿Que sector sera el que manipule la base de datos?**
 
-*Pues el indicado es aquel que tenga mas contacto con las fabriación de las piezas es decir, los supervisores de fabricación ellos son los indicados, a su vez pueden entrar otras areas dependiendo la complejidad y necesidad del cliente como el sector logistico para marcar que la pieza ya ha sido despachada a su destino o el sector de oficinas técnicas donde hace el control de seguimiento de fabricación y deciden que piezas entraran a producción.*
+*El indicado es aquel que tenga mas contacto con la fabricación de las piezas, es decir. los supervisores de fabricación, ellos son los indicados, a su vez pueden entrar otras areas dependiendo la complejidad y necesidad del cliente como el sector logistico para marcar que la pieza ya ha sido despachada a su destino o el sector de oficinas técnicas donde se hace el control de seguimiento de fabricación y deciden que piezas entraran a producción.*
 
-Bien, ya encontramos a los indicados para que manipulen los datos
-
-¿Y ahora?
+Bien, ya encontramos a los indicados para que manipulen los datos ¿Y ahora?
 Ahora toca usar el lapiz y el papel o [esta pagina muy sencilla](dbdesigner.net) para diagramar la base de datos.
 
 Evitando complejidades vamos a un caso sencillo de los datos que necesitamos para realizar la trazabalidad de un pieza metalica.
 
 **Datos**: Obra, Sector, direccion, Codigo, codigo_qr, Descripción, Cantidad, Peso, Longitud, Superficie, operario ensamblador.
 
-Respetando el paradigma de las bases de datos relaciónales no podemos meter toda esta información en una sola pues seria un total desastre, lo correcto seria separar la obra y las piezas y el codigo qr es tablas distintas y a cada una ubicarle los datos que lo determinen 
+Respetando el modelo de las bases de datos relaciónales no podemos meter toda esta información en una sola pues seria un total desastre, lo correcto seria separar la obra, las piezas y el codigo qr en tablas distintas y a cada una ubicarle los atributos pertinentes 
 
 Obra, sector y dirección tendran su tabla y las columnas seran
 
@@ -52,10 +50,10 @@ Codigo, descripción, cantidad, peso, longitud y superficie pueden ir juntas aun
     
   pieza_id | obra_id | codigo | descripcion | cantidad | peso | longitud | superficie 
 -----------|---------|------- | ------------|----------|------|--------- | ----------
- 1  | 1 | RF1-1 | Pieza S/Dibujo | 3 | 2500 | 9000 | 57
- 2  | 2 | RF1-2 | Pieza S/Dibujo | 2 | 1750 | 8500 | 67
+ 1  | 1001 | RF1-1 | Pieza S/Dibujo | 3 | 2500 | 9000 | 57
+ 2  | 1002 | RF1-2 | Pieza S/Dibujo | 2 | 1750 | 8500 | 67
  
- Necesitamos una trazabilidad o seguimiento  de estos productos y por ende tambien vamos a necesitar de una tabla mas que separes y trate cada codigo de la misma obra como piezas distintas (ya que en la producción podria fabricarse 1 unidad de la RF1-1 y 1 unidad de la RF1-2 dejando fuera las 2 faltantes de la RF1-1 y la faltante de la RF1-2 de las que tambien necesitamos una trazabalidad ya que el personal asignado para la fabricación puede ser otro, tambien el turno (mañana o tarde), fecha, etc...)
+ Necesitamos una trazabilidad o seguimiento  de estos productos y por ende tambien vamos a necesitar de una tabla mas que separe y trate cada codigo de la misma obra como piezas distintas (ya que en la producción podria fabricarse 1 unidad de la RF1-1 y 1 unidad de la RF1-2 dejando fuera las 2 faltantes de la RF1-1 y la faltante de la RF1-2 de las que tambien necesitamos una trazabalidad ya que el personal asignado para la fabricación puede ser otro, tambien el turno (mañana o tarde), fecha, etc...)
  
  Para ello la proxima tabla generara codigos_qr unicos que lo anexaran con la columna pieza_id de la tabla de piezas.
  
@@ -71,7 +69,7 @@ Como se puede observar el codigo qr se compone asi:
 
 [Codigo de pieza][Numero id de obra][y por ultimo un indice que separa en tantas cantidades tenga la pieza] 
 
-¿Como se veria la tabla si no respetariamos el paradigma de base de datos relacional?
+¿Como se veria la tabla si no respetariamos el modelo de base de datos relacional?
 
 obra | sector | direccion | codigo | codigo qr | descripcion | cantidad | largo | peso | superficie | operario ensamblador
 ---- | ------ | --------- | ------ | --------- | ----------- | -------- | ----- | ---- | -----------| ---------------------
@@ -81,7 +79,7 @@ Obra de prueba uno | sector de prueba uno | direccion 123 | RF1-1 | RF1-11001-3 
 Obra de prueba dos | sector de prueba dos | direccion 456 | RF1-2 | RF1-21002-1 | Pieza S/Dibujo | 2 | 8500 | 1750 | 67 | No iniciada
 Obra de prueba dos | sector de prueba dos | direccion 456 | RF1-2 | RF1-21002-2 | Pieza S/Dibujo | 2 | 8500 | 1750 | 67 | Zutano
 
-Y eso que solo son 11 columnas, imaginese en un proyecto real...Una total locura si se necesita actualizar o manipular muchos datos al mismo tiempo. 
+Y eso que solo son 11 columnas, imaginese el proyecto completo..Una total locura si se necesita actualizar o manipular muchos datos al mismo tiempo. 
 
 Los diagramas que se veran debajo son extractos de la base de datos que cree para el proposito de trazabalidad.
 
